@@ -1,0 +1,61 @@
+sudo: required
+dist: trusty
+language: ruby
+
+before_install:
+before_install:
+- gem install asciidoctor -v 1.5.2
+- gem install tilt
+- sudo pip install git+https://github.com/gitenberg-dev/gitberg
+- sudo pip install pillow
+- sudo pip install cssutils
+- sudo pip install docutils
+- sudo pip install roman
+- sudo pip install git+https://github.com/gitenberg-dev/pg-epubmaker
+script:
+- VERSION=`ruby -e "require 'yaml'; meta = YAML.load_file('metadata.yaml'); puts meta['_version'];"`
+- git clone https://github.com/gitenberg-dev/asciidoctor-htmlbook.git
+- sudo pip install -r asciidoctor-htmlbook/gitberg-machine/requirements.txt
+
+- /usr/bin/python -c "from gitenberg import travis; travis.build_epub()"
+- ebook-convert book.epub book.mobi
+- xvfb-run ebook-convert book.epub book.pdf
+branches:
+  only:
+  - master
+notifications:
+  webhooks:
+    urls:
+      - https://unglue.it/api/travisci/webhook
+    on_success: always
+    on_failure: never
+    on_start: never
+deploy:
+  skip_cleanup: true
+  provider: releases
+  api_key:
+    secure: IVsqgM5/Z8RlbjKqVCI9BwpPteMIZoNk+SswAxdsk4seMAXr/LYJkJc3M3c1JcEy8qO2PFFPmk96DzjAjxd3Co992c2fwPD3IeENWYlMMoAT8Lwkpfj8gK5UzuIUm9KQPQSF4SRekxmm24M61opfeseN5bWxDyYMKlCbUhchk0ul8As5UOtThvPfowowAupdUYitsUz+oXlKP+4vR/Hyn10jSJHPsYJz8GauPcHPHz3q9Vj9QI5wJ9vB44vBLfhkPhisKRijKST1TE+35YUdVL4v2GDjZVJ1YxJNk5MD2CeMOa7Cdt+oHvprYUQ2SdbCg/SmSWY3L9dDKV7LUI+3wzLjy4Sjimc+PLyVrCxNQegGV9Zoy+u0tboq+BaWjMrTs72MFYw9glQKLD+u/ovGnB/DoDlBDS4bejNCCe2Lh1NsaODDOyTcUjigiYebHxQp6hjVOhAJc9mY08eireeSUwtqvOq9Ye4JFgknr/lAwmunG2iFNkadLbZfgSillyoRK01/Mj4Ewwsfsq1fEGzEe/DHWAtVRaB1wc5iPwkTjHjtUqh0IK9R66/pQrgjVwD7iLChD3g/1TThz/gDEYlMEJ6zIygElD2b9jHkN3Fsep2zbh82WHCzD4u+xQOw/wx+htAfcfZaSRAl58GF9sVb0CHFGkihf3SOSgvEjq6slBs=
+  file:
+    - book.epub
+    - book.mobi
+    - book.pdf
+  "on":
+    repo: GITenberg/The-Variation-of-Animals-and-Plants-under-Domestication-Volume-1_2871
+addons:
+  apt:
+    packages:
+    - xsltproc
+    - xvfb
+    - calibre
+    - python-pip
+    - git
+    - python-dev
+    - libjpeg-dev
+    - libpng-dev
+    - libfreetype6
+    - libfreetype6-dev
+    - zlib1g-dev
+    - python-lxml
+    - libxml2-dev
+    - libxslt1-dev
+    - tidy
