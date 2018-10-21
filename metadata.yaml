@@ -1,5 +1,5 @@
 _repo: The-Variation-of-Animals-and-Plants-under-Domestication-Volume-1_2871
-_version: 0.2.0
+_version: 0.2.1
 covers:
 - cover_type: generated
   image_path: cover.png
@@ -31,5 +31,6 @@ subjects:
 - !lcc 'QH'
 - !lcsh 'Domestic animals'
 - !lcsh 'Variation (Biology)'
+- GITenberg
 title: The Variation of Animals and Plants under Domestication — Volume 1
 url: http://www.gutenberg.org/ebooks/2871
